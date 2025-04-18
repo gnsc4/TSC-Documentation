@@ -1,3 +1,208 @@
-# Torn Spies Central
+# TSC Companion Wiki
 
-Here there will be some generic "what is TSC" and what is this site text. Currently, I cannot be arsed :P
+## Table of Contents
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Configuration](#configuration)
+  - [API Key Setup](#api-key-setup)
+  - [Feature Toggles](#feature-toggles)
+- [Features](#features)
+  - [Profile Page](#profile-page)
+  - [Faction - Normal](#faction---normal)
+  - [Faction - Chain](#faction---chain)
+  - [Faction - War](#faction---war)
+  - [Faction - TT War](#faction---tt-war)
+  - [Company Page](#company-page)
+  - [Abroad Page](#abroad-page)
+  - [Points Market](#points-market)
+  - [Attack Page](#attack-page)
+- [How Spy Data Works](#how-spy-data-works)
+  - [Spy Estimates](#spy-estimates)
+  - [Stat Intervals](#stat-intervals)
+  - [Caching System](#caching-system)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Cache Management](#cache-management)
+- [Technical Details](#technical-details)
+  - [API Endpoints](#api-endpoints)
+  - [Dark Mode Support](#dark-mode-support)
+- [Credits](#credits)
+
+## Introduction
+
+TSC Companion is a userscript for Torn City that provides spy information for players directly within various pages of the Torn website. It helps you see stat estimates and battle score information for other players without needing to switch between different tools or websites.
+
+The script was created by mavri [2402357] with special thanks to Kwack [2190604]. The "Next" version represents an improved and updated version of the original TSC Companion.
+
+## Installation
+
+To install TSC Companion:
+
+1. Make sure you have a userscript manager installed in your browser:
+   - Tampermonkey (Chrome, Firefox, Edge, Safari)
+   - Violentmonkey (Chrome, Firefox)
+   - Greasemonkey (Firefox)
+
+2. Install the script by visiting:
+   ```
+   https://github.com/LeoMavri/TSC-Companion/raw/next/dist/tsc-companion.user.js
+   ```
+
+3. Your userscript manager should detect the script and prompt you to install it.
+
+4. After installation, navigate to your Torn profile page to configure the script.
+
+## Configuration
+
+### API Key Setup
+
+1. Go to your own profile page on Torn (https://www.torn.com/profiles.php?XID=YOUR_ID)
+2. Find the "TSC Settings" dropdown panel (it will glow if not configured)
+3. Enter your TSC API key in the "API Key" field
+4. The key will be verified automatically when you click away from the field
+
+> **Note**: The API key field will be blurred for privacy once set. Click on it to see the full key.
+
+### Feature Toggles
+
+The settings panel allows you to enable or disable individual features:
+
+- **Enable Script**: Master toggle for the entire script
+- **Profile Page**: Shows spy data on user profiles
+- **Faction - Normal**: Shows spy data on faction member pages
+- **Faction - Chain**: Shows spy data on chain pages
+- **Faction - War**: Shows spy data on faction war pages
+- **Faction - TT War**: Shows spy data on territory war pages
+- **Company Page**: Shows spy data on company pages
+- **Abroad Page**: Shows spy data on the abroad people page
+- **Points Market**: Shows spy data on the points market
+- **Attack Page**: Shows spy data on the attack page
+
+Additional settings:
+- **Clear cached spies**: Removes only spy data from local storage
+- **Clear all cache**: Removes all stored data (including settings)
+- **Extra debug logs**: Enables additional console logging (for troubleshooting)
+
+## Features
+
+### Profile Page
+
+When you visit a player's profile page, TSC Companion adds a table showing:
+- Stat estimate
+- Stat interval (if available)
+- Battle score (if available)
+- Fair Fight value (if available)
+- Age of the data
+
+The table appears directly on the profile page below the player's information.
+
+### Faction - Normal
+
+When viewing a faction's page, each member's name will have a spy button next to it. Hovering over this button shows detailed spy information including:
+- Stat estimate
+- Stat interval (if available)
+- Last update time
+- Battle score (if available)
+
+### Faction - Chain
+
+Similar to Faction - Normal, but specifically for the chain war page. Shows compact spy information next to each player's name during a chain.
+
+### Faction - War
+
+Adds spy information to the faction war pages (territorial and organized crime). Shows both estimate and interval information with fair fight values.
+
+### Faction - TT War
+
+Specifically for territory war pages, adds spy information to each member participating in the territory battle.
+
+### Company Page
+
+When viewing a company's employee list, adds spy information next to each employee's name.
+
+### Abroad Page
+
+When viewing the list of players abroad, adds spy information next to each player's name.
+
+### Points Market
+
+Adds spy information to sellers on the points market page.
+
+### Attack Page
+
+When attacking another player, shows their spy information on the attack page.
+
+## How Spy Data Works
+
+### Spy Estimates
+
+Spy estimates are calculated based on available data about a player's stats. The system shows:
+- A single number estimate when only basic information is available
+- A range (min-max) when more detailed information is available
+- The age of the data (how long since it was updated)
+
+### Stat Intervals
+
+When available, stat intervals provide a more accurate range for a player's stats:
+- **Min**: Lower bound of the stat estimate
+- **Max**: Upper bound of the stat estimate
+- **Battle Score**: Calculated battle stat value
+- **Fair Fight**: The fair fight multiplier based on the stats
+
+### Caching System
+
+TSC Companion uses a local caching system to:
+- Store spy data for 12 hours to reduce API calls
+- Cache your user data to verify your identity
+- Store your settings and preferences
+
+You can clear this cache in the settings panel if needed.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **API Key Issues**
+   - If your API key is invalid, you'll see an error message when the script tries to load data
+   - Make sure your key is correctly entered without any extra spaces
+
+2. **Honor Bars Conflict**
+   - The script works best with honor bars turned off
+   - You can disable honor bars in Torn Settings -> General Settings -> Honor Names -> Off
+
+3. **Missing Information**
+   - If you don't see spy data for some users, it may be because:
+     - The user's data hasn't been spied yet
+     - The API server is experiencing issues
+     - Your API key has reached its limit
+
+### Cache Management
+
+If you experience issues with the script, try clearing the cache:
+
+1. **Clear Spy Cache**: Removes only spy data, keeping your settings intact
+2. **Clear All Cache**: Completely resets the script (you'll need to re-enter your API key)
+
+## Technical Details
+
+### API Endpoints
+
+The script communicates with two main endpoints:
+- `https://tsc.diicot.cc/next`: For fetching spy data
+- `https://api.torn.com/user/`: For verifying your user data
+
+The script uses a combination of localStorage for caching and XMLHttpRequest/fetch API intercepts to enhance functionality.
+
+### Dark Mode Support
+
+TSC Companion automatically detects Torn's dark mode and adjusts its UI accordingly using CSS variables:
+- Light mode uses light backgrounds with dark text
+- Dark mode uses dark backgrounds with light text
+
+## Credits
+
+- **Developer**: mavri [2402357]
+- **Special Thanks**: Kwack [2190604]
+- **Copyright**: 2025, diicot.cc
+
+For updates and more information, visit: https://github.com/LeoMavri/TSC-Companion
